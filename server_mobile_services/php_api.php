@@ -1,4 +1,11 @@
 <?php
+require ('functions/SajanaJsonAjax.php');
+require ('functions/KontaktZBaza.php');
+
+
+
+
+
 //Łączenie z bazką
 $baza = mysqli_connect('mariadb5.iq.pl', 'iexample_fnm', 'rcdky4y3zu', 'iexample_fnm');
 if (!$baza) {die("Connection to MySQL database failed " . mysqli_connect_error());
@@ -9,6 +16,18 @@ if (!$baza) {die("Connection to MySQL database failed " . mysqli_connect_error()
 echo("test32: <br/>");
 
 
+$kontaktZBaza  = new KontaktZBaza($baza);
+$jsonAjaxApi = new SajanaJsonAjaxApi();
+
+
+
+
+
+
+
+
+
+
 /*
 PHP API na razie do pierwszych testów na GET poem przepnie się na post i najlepiej na model json->php->json
 
@@ -16,9 +35,11 @@ główny parametr jaki przyjmuje API to action który odpowiada odpowiedniej fun
 
 */
 
-if (isset($_GET['action'])){
-	if ($_GET['action'] == 'addUser'){
-		/*#################################
+
+$requestData = $jsonAjaxApi->odbierzSajanAjax('apiRequest');
+if (isset($requestData['action'])){
+	if ($requestData['action'] == 'addUser'){
+/*#################################
 		
 		addUser 
 		
@@ -39,12 +60,14 @@ if (isset($_GET['action'])){
 		
 		#############################*/
 		echo("akcja dodaj usera <br/>");
-		if (isset($_GET['login']) && isset($_GET['password'])&& isset($_GET['eMail'])){
+		if (isset($requestData['login']) && isset($requestData['password'])&& isset($requestData['eMail'])){
 			echo("wszystko jest set<br/>");
-			$login = mysql_real_escape_string($_GET['login']);
-			$password = $_GET['password'];
+			$login = mysql_real_escape_string($requestData['login']);
+			$password = $requestData['password'];
 			$passordHash = md5($password);
-			$eMail = mysql_real_escape_string($_GET['eMail']);
+			$eMail = mysql_real_escape_string($requestData['eMail']);
+
+			
 			$sqlQueryString = "INSERT INTO `users` set `login`='$login', `passwordHash` = '$passwordHash',`eMail`='$eMail';";
 			if ($baza->query("$sqlQueryString")){
 				echo('gites powinno być w bazie');
@@ -63,41 +86,6 @@ if (isset($_GET['action'])){
 		}
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*
-
-function send_funny_content($user OR $trendsetter, chain1 position, chain2 position){
-
-}
-
-function react_to_content($objectID, $reaction){
-
-}
-
-
-**/
-
-
 
 
 ?> 
