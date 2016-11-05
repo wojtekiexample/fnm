@@ -1,5 +1,5 @@
 <?php
-echo("test4");
+echo("test5: ");
 //laczymy z bazka
 //@ $baza = new mysqli('mariadb5.iq.pl','iexample_fnm','rcdky4y3zu','iexample_fnm');
 
@@ -25,8 +25,10 @@ function react_to_content($objectID, $reaction){
 }
 
 */
+
+/*
 if (isset($_GET['action'])){
-	/*###### 	FUNKCJA  addUser	 #######*/
+	/*###### 	FUNKCJA  addUser	 #######
 	if ($_GET['action'] == 'addUser'){
 		if (isset($GET('login')) && isset($GET('password'))&& isset($GET('eMail'))){
 			$login = $GET('login');
@@ -42,7 +44,7 @@ if (isset($_GET['action'])){
 			}
 		}
 	}
-}
+}*/
 
 
 
