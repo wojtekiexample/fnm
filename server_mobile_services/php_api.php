@@ -41,11 +41,10 @@ if (isset($_GET['action'])){
 		echo("akcja dodaj usera <br/>");
 		if (isset($_GET['login']) && isset($_GET['password'])&& isset($_GET['eMail'])){
 			echo("wszystko jest set<br/>");
-			
-			$login = $_GET['login'];
+			$login = mysql_real_escape_string($_GET['login']);
 			$password = $_GET['password'];
 			$passordHash = md5($password);
-			$eMail = $_GET['eMail'];
+			$eMail = mysql_real_escape_string($_GET['eMail']);
 			$sqlQueryString = "INSERT INTO `users` set `login`='$login', `passwordHash` = '$passwordHash',`eMail`='$eMail';";
 			if ($baza->query("$sqlQueryString")){
 				echo('gites powinno być w bazie');
@@ -58,8 +57,6 @@ if (isset($_GET['action'])){
 			$userActionsTableName='actions_user_'.$idUsera;
 			// dopisujemu mu nazwe jego wlasnej tabeli z akcjami
 			$baza->query("UPDATE `users` set `userActionsTableName`='$userActionsTableName' WHERE `id` = '$idUsera';");
-			
-			
 			//tworzymyTabeleUsera
 			$baza->query("CREATE TABLE $userActionsTableName (id int, publicationId int, reaction int)");
 			
