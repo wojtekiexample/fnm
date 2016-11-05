@@ -1,6 +1,14 @@
 <?php
+echo("test4");
 //laczymy z bazka
-@ $baza = new mysqli('mariadb5.iq.pl','iexample_fnm','rcdky4y3zu','iexample_fnm');
+//@ $baza = new mysqli('mariadb5.iq.pl','iexample_fnm','rcdky4y3zu','iexample_fnm');
+
+
+
+
+
+
+$baza = new mysqli("mariadb5.iq.pl","iexample_fnm","rcdky4y3zu","iexample_fnm");
 if (mysqli_connect_errno()){
 echo 'Wystąpił bląd nie udało się połączyć z bazą. ';	
 }
@@ -16,10 +24,7 @@ function react_to_content($objectID, $reaction){
 
 }
 
-
-**/
-
-
+*/
 if (isset($_GET['action'])){
 	/*###### 	FUNKCJA  addUser	 #######*/
 	if ($_GET['action'] == 'addUser'){
@@ -43,11 +48,4 @@ if (isset($_GET['action'])){
 
 
 
-
-
-
-
-
-
-?> 
-
+?>
