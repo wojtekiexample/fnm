@@ -6,8 +6,6 @@ if (!$baza) {die("Connection to MySQL database failed " . mysqli_connect_error()
 
 
 // tu zmieniam sobie insex testy żeby wiedzieć czy serwer nie cashuje poprzedniej wersji
-
-
 echo("test31: <br/>");
 
 
