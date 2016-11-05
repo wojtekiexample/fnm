@@ -1,11 +1,7 @@
 <?php
-$host = $daneDoMySQL->{'mariadb5.iq.pl'};
-$user = $daneDoMySQL->{'iexample_fnm'};
-$password = $daneDoMySQL->{'rcdky4y3zu'};
-$db = $daneDoMySQL->{'iexample_fnm'};
-//ustanawiamy polączenie
-@ $bazaPortfolio = new mysqli($host,$user,$password,$db);//@ $nazwabazy = new nysqli ('host','uzytkownik','haslo','baza');
-if (mysqli_connect_errno()){//mysqli_connect_errno() Return an error code from the last connection error, if any:
+//laczymy z bazka
+@ $bazaPortfolio = new mysqli('mariadb5.iq.pl','iexample_fnm','rcdky4y3zu','iexample_fnm');
+if (mysqli_connect_errno()){
 echo 'Wystąpił bląd nie udało się połączyć z bazą. ';	
 }
 
@@ -27,7 +23,8 @@ function react_to_content($objectID, $reaction){
 
 
 
-function addUser(){
+function addUser($userName,$password,$eMail){
+	
 
 }
 
