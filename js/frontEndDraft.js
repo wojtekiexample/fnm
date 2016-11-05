@@ -8,10 +8,15 @@ var dodajUseraEMailInput = document.getElementById("dodajUseraEMailInput");
 
 dodajUseraBtn.addEventListener("click",onClickDodajUseraBtn);
 function onClickDodajUseraBtn(){
-	var jsonAjax = new SajanaAjax('server_mobile_services/php_api.php',przetworzResponseTworzeniuUsera);
-	jsonAjax.dodaj("login",dodajUseraLoginInput.val);
-	jsonAjax.dodaj("eMail",dodajUseraEMailInput.val);
-	jsonAjax.dodaj("password",dodajUseraPasswordInput.val);
+	var apiRequest = new Object();
+	apiRequest.action = "addUser";
+	apiRequest.login = dodajUseraLoginInput.value;
+	apiRequest.eMail = dodajUseraEMailInput.value;
+	apiRequest.password = dodajUseraPasswordInput.value;
+	
+	
+	var jsonAjax = new SajanaAjax('/server_mobile_services/php_api.php',przetworzResponseTworzeniuUsera);
+	jsonAjax.dodaj("apiRequest",apiRequest);
 	jsonAjax.start();
 }
 
