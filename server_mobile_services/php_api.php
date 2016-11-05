@@ -1,17 +1,38 @@
 <?php
-echo("test5: ");
-//laczymy z bazka
-//@ $baza = new mysqli('mariadb5.iq.pl','iexample_fnm','rcdky4y3zu','iexample_fnm');
+// test pulla
+/* 
+
+$host = $daneDoMySQL->{'mariadb5.iq.pl'};
+$user = $daneDoMySQL->{'iexample_fnm'};
+$password = $daneDoMySQL->{'rcdky4y3zu'};
+$db = $daneDoMySQL->{'iexample_fnm'};
 
 
-
-
-
-
-$baza = new mysqli("mariadb5.iq.pl","iexample_fnm","rcdky4y3zu","iexample_fnm");
-if (mysqli_connect_errno()){
+//ustanawiamy polączenie
+$bazaPortfolio = new mysqli($host,$user,$password,$db);//@ $nazwabazy = new nysqli ('host','uzytkownik','haslo','baza');
+if (mysqli_connect_errno()){//mysqli_connect_errno() Return an error code from the last connection error, if any:
 echo 'Wystąpił bląd nie udało się połączyć z bazą. ';	
 }
+**/ 
+echo("test7: ");
+
+
+$servername = "mariadb5.iq.pl";
+$username = 'iexample_fnm';
+$password = 'rcdky4y3zu';
+
+// Create connection
+$db = mysqli_connect($servername, $username, $password, $username);
+
+// Check connection
+if (!$db) {
+    die("Connection to MySQL database failed " . mysqli_connect_error());
+}
+
+
+//  $db->close();
+//disconnect
+
 
 
 /*
@@ -24,30 +45,18 @@ function react_to_content($objectID, $reaction){
 
 }
 
-*/
 
-/*
-if (isset($_GET['action'])){
-	/*###### 	FUNKCJA  addUser	 #######
-	if ($_GET['action'] == 'addUser'){
-		if (isset($GET('login')) && isset($GET('password'))&& isset($GET('eMail'))){
-			$login = $GET('login');
-			$password = $GET('password');
-			$passordHash = md5($password);
-			$eMail = $GET('eMail');
-			
-			$sqlQueryString = "INSERT INTO `users` set `login`='$login', `passwordHash` = '$passwordHash',`eMail`='$eMail'";
-			if (!$baza->query("$sqlQuery")){
-				echo('coś sie obsrało z wysłaniem do bazy');
-			}else{
-				echo('gites powinno być w bazie');
-			}
-		}
-	}
-}*/
+**/
 
 
 
 
 
-?>
+function addUser(){
+
+}
+
+
+
+?> 
+
