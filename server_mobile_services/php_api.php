@@ -6,7 +6,7 @@ if (!$baza) {die("Connection to MySQL database failed " . mysqli_connect_error()
 
 
 // tu zmieniam sobie insex testy żeby wiedzieć czy serwer nie cashuje poprzedniej wersji
-echo("test31: <br/>");
+echo("test32: <br/>");
 
 
 /*
@@ -54,8 +54,14 @@ if (isset($_GET['action'])){
 			}
 			//pobieranie aktualnego indexu tabeli users
 			$idUsera = $baza->insert_id;
+			//ustalamy nazwe dla tabeli akcji danego usera znajac juz jego id
+			$userActionsTableName='actions_user_'.$idUsera;
+			// dopisujemu mu nazwe jego wlasnej tabeli z akcjami
+			$baza->query("UPDATE `users` set `userActionsTableName`='$userActionsTableName' WHERE `id` = '$idUsera';");
+			
+			
 			//tworzymyTabeleUsera
-			$baza->query("CREATE TABLE actions_user_".$idUsera."(id int, publicationId int, reaction int)");
+			$baza->query("CREATE TABLE $userActionsTableName (id int, publicationId int, reaction int)");
 			
 		}
 	}
