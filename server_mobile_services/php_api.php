@@ -1,5 +1,5 @@
 <?php
-
+// test pulla
 /* 
 
 $host = $daneDoMySQL->{'mariadb5.iq.pl'};
