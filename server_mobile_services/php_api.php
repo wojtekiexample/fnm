@@ -52,7 +52,7 @@ if (isset($requestData['action'])){
 			$baza->query("UPDATE `users` set `userActionsTableName`='$userActionsTableName' WHERE `id` = '$idUsera';");
 			//tworzymyTabeleUsera
 			$baza->query("CREATE TABLE $userActionsTableName (id int, publicationId int, reaction int)");
-			echo('{"status";"sukces"}');
+			echo('{"status":"sukces"}');
 		}
 	}
 	if ($requestData['action'] == 'addFunnyContent'){
@@ -79,7 +79,7 @@ if (isset($requestData['action'])){
 		}
 	}
 }else{
-	echo('{"status";"błąd nie podana akcja"}');
+	echo('{"status":"błąd nie podana akcja"}');
 }
 
 
