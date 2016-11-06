@@ -52,11 +52,34 @@ if (isset($requestData['action'])){
 			$baza->query("UPDATE `users` set `userActionsTableName`='$userActionsTableName' WHERE `id` = '$idUsera';");
 			//tworzymyTabeleUsera
 			$baza->query("CREATE TABLE $userActionsTableName (id int, publicationId int, reaction int)");
-			echo('{"statuss";"sukces"}');
+			echo('{"status";"sukces"}');
+		}
+	}
+	if ($requestData['action'] == 'addFunnyContent'){
+        /*#################################
+		
+		addFunnyContent
+		
+		DESCRIPTION:
+			dodajae treść
+			
+		PARAMETERS:
+			ownerId:int - id usera który wrzucił
+			fcTitle:string - tytuł
+			fcContent:HTMLstrin - content
+			
+		RETURN:jsonString - status
+		#############################*/
+		if (isset($requestData['ownerId']) && isset($requestData['fcTitle'])&& isset($requestData['fcContent'])){
+			$ownerId = $requestData['ownerId'];
+			$fcTitle = $requestData['fcTitle'];
+			$fcContent = $requestData['fcContent'];
+			$baza->query("INSERT INTO `funnyContent` set `ownerId`='$ownerId', `fcTitle`='$fcTitle',`fcContent`='$fcContent';");
+			
 		}
 	}
 }else{
-	echo('{"statuss";"błąd nie podana akcja"}');
+	echo('{"status";"błąd nie podana akcja"}');
 }
 
 
