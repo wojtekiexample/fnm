@@ -75,7 +75,7 @@ if (isset($requestData['action'])){
 			$fcTitle = $requestData['fcTitle'];
 			$fcContent = $requestData['fcContent'];
 			$baza->query("INSERT INTO `funnyContent` set `ownerId`='$ownerId', `fcTitle`='$fcTitle',`fcContent`='$fcContent';");
-			
+			echo('{"status":"sukces"}');
 		}
 	}
 }else{

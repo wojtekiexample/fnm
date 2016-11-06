@@ -1,24 +1,45 @@
-var dodajUseraBtn = document.getElementById("dodajUseraBtn");
+
+
+//dodaj usera vars
 var dodajUseraLoginInput = document.getElementById("dodajUseraLoginInput");
 var dodajUseraPasswordInput = document.getElementById("dodajUseraPasswordInput");
 var dodajUseraEMailInput = document.getElementById("dodajUseraEMailInput");
-
-
-
-
+var dodajUseraBtn = document.getElementById("dodajUseraBtn");
+//doaaj coś smiesznego vars
+var dadajCosSmiesznegoIdInput = document.getElementById("dadajCosSmiesznegoIdInput");
+var dadajCosSmiesznegoTitleInput = document.getElementById("dadajCosSmiesznegoTitleInput");
+var dadajCosSmiesznegoContentInput = document.getElementById("dadajCosSmiesznegoContentInput");
+var dadajCosSmiesznegoBtn = document.getElementById("dadajCosSmiesznegoBtn");
+//listnery
 dodajUseraBtn.addEventListener("click",onClickDodajUseraBtn);
+dadajCosSmiesznegoBtn.addEventListener("click",onClickdadajCosSmiesznegoBtn);
+//funkcje na klik
 function onClickDodajUseraBtn(){
 	var apiRequest = new Object();
 	apiRequest.action = "addUser";
 	apiRequest.login = dodajUseraLoginInput.value;
 	apiRequest.eMail = dodajUseraEMailInput.value;
 	apiRequest.password = dodajUseraPasswordInput.value;
-	
-	
 	var jsonAjax = new SajanaAjax('/server_mobile_services/php_api.php',przetworzResponseTworzeniuUsera);
 	jsonAjax.dodaj("apiRequest",apiRequest);
 	jsonAjax.start();
 }
+function onClickdadajCosSmiesznegoBtn(){
+	var apiRequest = new Object();
+	apiRequest.action = "addFunnyContent";
+	apiRequest.ownerId = dadajCosSmiesznegoIdInput.value;
+	apiRequest.fcTitle = dadajCosSmiesznegoTitleInput.value;
+	apiRequest.fcContent = dadajCosSmiesznegoContentInput.value;
+	var jsonAjax = new SajanaAjax('/server_mobile_services/php_api.php',przetworzResponseTworzeniuUsera);
+	jsonAjax.dodaj("apiRequest",apiRequest);
+	jsonAjax.start();
+}
+
+
+
+
+
+
 
 function przetworzResponseTworzeniuUsera(response){
 	console.log(response);

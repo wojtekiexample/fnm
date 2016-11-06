@@ -44,7 +44,15 @@ input{
 </form>
 <div class="button" id="dodajUseraBtn">Dodaj</div>
 
-
+<h1>Dodaj coś śmiesznego:</h1>
+<form id="dadajCosSmiesznegoForm">
+	id:<input id="dadajCosSmiesznegoIdInput" type="number" /><br/>
+	tytuł:<input id="dadajCosSmiesznegoTitleInput" type="text" /><br/>
+    treść:<br/>
+    <textarea id="dadajCosSmiesznegoContentInput">
+    </textarea>
+</form>
+<div class="button" id="dadajCosSmiesznegoBtn">Dodaj</div>
 
 
 <script type="text/javascript" src="js/frontEndDraft.js"></script>

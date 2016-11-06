@@ -26,7 +26,7 @@ start
 
 0. create database model
 		a. users - DONE
-	b. objects - IN PROGRESS
+		b. objects - DONE
 	c. reactions
 
 	//later 2. insert sample data
