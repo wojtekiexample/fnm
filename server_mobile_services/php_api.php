@@ -191,12 +191,12 @@ if (isset($requestData['action'])){
 				$isEmpty = $response2['id'];
 							
 				if(empty($isEmpty))
-				return $currentId;
-				break;
+					{
+					return $currentId;
+					break;
+					}
 				else
 				$currentId --;
-				
-				
 			}
 			
 			
