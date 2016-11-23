@@ -89,6 +89,7 @@ if (isset($requestData['action'])){
 			$ownerId = $requestData['ownerId'];
 			$fcTitle = $requestData['fcTitle'];
 			$fcContent = $requestData['fcContent'];
+			$fcContent = htmlspecialchars($fcContent,ENT_COMPAT);
 
 			$baza->query("INSERT INTO `funnyContent` set `ownerId`='$ownerId', `fcTitle`='$fcTitle',`fcContent`='$fcContent';");
 			

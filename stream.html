@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Untitled Document</title>
+<title>Stream</title>
 </head>
 
 <body>
@@ -10,7 +10,9 @@
 
 
 
+<div id="fcContainer">
 
+</div>
 
 
 
@@ -18,11 +20,11 @@
 
 
 <script type="text/javascript">
-
+var fcContainer = document.getElementById("fcContainer");
 
 var apiRequest = new Object();
 apiRequest.action = "getContent";
-apiRequest.userId = 1;
+apiRequest.userId = 42;
 
 var jsonAjax = new SajanaAjax('/server_mobile_services/php_api.php',przetworzResponseTworzeniuUsera);
 jsonAjax.dodaj("apiRequest",apiRequest);
@@ -30,7 +32,11 @@ jsonAjax.start();
 
 
 function przetworzResponseTworzeniuUsera(response){
-	console.log(response);
+	if (response){
+		console.log(response);
+		var fcContentHTML = decodeHTMLEntities (response.fcContent);
+		fcContainer.innerHTML = fcContentHTML;	
+	}
 }
 
 
@@ -79,6 +85,33 @@ function SajanaAjax (url,callBackFunction){
 	}
 }
 
+
+
+
+
+
+
+
+
+function decodeHTMLEntities(text) {
+    var entities = [
+        ['amp', '&'],
+        ['apos', '\''],
+        ['#x27', '\''],
+        ['#x2F', '/'],
+        ['#39', '\''],
+        ['#47', '/'],
+        ['lt', '<'],
+        ['gt', '>'],
+        ['nbsp', ' '],
+        ['quot', '"']
+    ];
+
+    for (var i = 0, max = entities.length; i < max; ++i) 
+        text = text.replace(new RegExp('&'+entities[i][0]+';', 'g'), entities[i][1]);
+
+    return text;
+}
 
 </script>
 
