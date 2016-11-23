@@ -175,6 +175,11 @@ if (isset($requestData['action'])){
 				$query = 'SELECT `id` FROM `funnyContent` ORDER BY `id` DESC LIMIT 1;';
 				$wieraszAsoc = $kontaktZBaza->selectRowToAsoc($query);
 				$currentId = $wieraszAsoc['id'];
+<<<<<<< HEAD
+=======
+				echo("nasze current id to: ".$currentId);
+
+>>>>>>> 6ccb97e92ad00d4e2f551e23d6325d2c04352c86
 					
 				for($x=$currentId ;  ; $x-- ){
 			
