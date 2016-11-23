@@ -163,10 +163,10 @@ if (isset($requestData['action'])){
 	 * 
 	 * na razie wysyla po kolei z glownej tresci
 	 * 
-	 * 1. pobierz najnowszy - $n element z bazy
+	 * 1. pobierz id najnowszego - $n elementu z bazy
 	 * 2. sprawdz, czy jest w tablicy reakcji usera 
-	 * 		a. nie -> zwroc ID
-	 * 		b. tak -> zwiększ $n o 1, przejdź do 1.
+	 * 	a) jeśli nie (tzn nie był oglądany) pobierz dane z elementu o tym id 
+	 *  b) jeśli był oglądany dekrementuj id
 	 * 
 	 * */
 			
@@ -175,22 +175,26 @@ if (isset($requestData['action'])){
 				$query = 'SELECT `id` FROM `funnyContent` ORDER BY `id` DESC LIMIT 1;';
 				$wieraszAsoc = $kontaktZBaza->selectRowToAsoc($query);
 				$currentId = $wieraszAsoc['id'];
+
 					
-				for($x=$currentId ;  ; $x-- ){
-			
-				$query = 'SELECT `id` FROM `actions_user_'.$userId.'` WHERE `publicationId` = '.$x.';';
+				for($currentId ;  ; $currentId-- ){
+				$query = 'SELECT `id` FROM `actions_user_'.$userId.'` WHERE `publicationId` = '.$currentId.';';
 				$wieraszAsoc = $kontaktZBaza->selectRowToAsoc($query);
-				$match = $wieraszAsoc['id'];
-				
-				if(empty($match)){
-					echo '{"fcContent":"'.$x.'","fcTitle":"dupa","fcURL":"/sciezkadokatalogu/smieszki'.$x.'.html"}';
+				$wasDisplayedAlredy = !empty($wieraszAsoc['id']);
+
+				if(!$wasDisplayedAlredy){
+					
+					$query = 'SELECT `id`, `fcTitle`, `fcContent`  FROM `funnyContent` WHERE `id` = '.$currentId.';';
+					$wieraszAsoc = $kontaktZBaza->selectRowToAsoc($query);
+					
+					$fcTitle = $wieraszAsoc['fcTitle'];
+					$fcContent = $wieraszAsoc['fcContent'];
+					
+					echo '{"fcTitle":"'.$fcTitle.'","fcContent":"'.$fcContent.'"}';
 					break;	
 				}
 				
 			}
-			
-			
-		echo('{"status":"sukces"}');
 		}
 		
 		}
