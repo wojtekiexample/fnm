@@ -61,7 +61,7 @@ if (isset($requestData['action'])){
 			$baza->query("UPDATE `users` set `userActionsTableName`='$userActionsTableName' WHERE `id` = '$idUsera';");
 
 			//tworzymyTabeleUsera
-			$baza->query("CREATE TABLE $userActionsTableName (id int, publicationId int, reaction int)");
+			$baza->query("CREATE TABLE $userActionsTableName (id int(11) AUTO_INCREMENT PRIMARY KEY, publicationId int(11), reaction int(11))");
 
 			echo('{"status":"sukces"}');
 		}
@@ -89,7 +89,7 @@ if (isset($requestData['action'])){
 			$ownerId = $requestData['ownerId'];
 			$fcTitle = $requestData['fcTitle'];
 			$fcContent = $requestData['fcContent'];
-			$fcContent = htmlspecialchars($fcContent,ENT_COMPAT);
+			$fcContent = htmlspecialchars($fcContent, ENT_QUOTES);
 
 			$baza->query("INSERT INTO `funnyContent` set `ownerId`='$ownerId', `fcTitle`='$fcTitle',`fcContent`='$fcContent';");
 			
@@ -110,9 +110,11 @@ if (isset($requestData['action'])){
 		 * id usera
 		 * id obrazka
 		 * reakcja - reaction types:
-		 * 		like: 1
-		 * 		ban (dislike): -1
-		 * 		dont care: 0
+		 * 		
+		 * 		ban (dislike): 1
+		 *		dont care: 2
+		 *		like: 3
+		 * 		
 		 * 	
 		 * 
 		 * return status
@@ -125,17 +127,16 @@ if (isset($requestData['action'])){
 			$userId = $requestData['userId'];
 			$fcObjectId = $requestData['fcObjectId'];
 			$fcReaction = $requestData['fcReaction'];
+			
+			if ($baza->query('INSERT INTO `actions_user_'.$userId.'` set `reaction`='.$fcReaction.',`publicationId`='.$fcObjectId.';')){
+				echo('{"status":"sukces"}');
+			}else{
+				echo('{"status":"obsrało się"}');
+			}
 
-			$baza->query('INSERT INTO `action_user_'.$userId.'` set `id`='.$fcObjectId.', `reaction`='.$fcReaction.',`publicationId`='.$fcObjectId.';');
-			
-			// id 	publicationId 	reaction 
-			
-			
-			
-		echo('{"status":"sukces"}');
 		}
 		
-		}
+	}
 	
 	if($requestData['action'] == 'getContent'){
 		
@@ -191,7 +192,7 @@ if (isset($requestData['action'])){
 					$fcTitle = $wieraszAsoc['fcTitle'];
 					$fcContent = $wieraszAsoc['fcContent'];
 					
-					echo '{"fcTitle":"'.$fcTitle.'","fcContent":"'.$fcContent.'"}';
+					echo '{"id":"'.$currentId.'","fcTitle":"'.$fcTitle.'","fcContent":"'.$fcContent.'"}';
 					break;	
 				}
 				
