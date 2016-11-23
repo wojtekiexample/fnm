@@ -139,6 +139,72 @@ if (isset($requestData['action'])){
 		}
 	
 	
+	
+	
+	if($requestData['action'] == 'getContent'){
+		
+		/*
+		 * 
+		 * getContent
+		 * 
+		 * desc:
+		 * pobiera nastepna tresc
+		 * 
+		 * param:
+		 * id usera
+		 * 
+		 * 
+		 * return:
+		 * id obrazka
+		 * 
+		 * */
+		
+		
+		if (isset($requestData['userId']) ){
+
+
+		
+	/* 
+	 * 
+	 * na razie wysyla po kolei z glownej tresci
+	 * 
+	 * 1. pobierz najnowszy - $n element z bazy
+	 * 2. sprawdz, czy jest w tablicy reakcji usera 
+	 * 		a. nie -> zwroc ID
+	 * 		b. tak -> zwiększ $n o 1, przejdź do 1.
+	 * 
+	 * */
+
+			
+				$userId = $requestData['userId'];
+				
+				$response = $baza->query('SELECT id FROM funnyContent ORDER BY id DESC LIMIT 1;');
+				$response = mysqli_fetch_assoc($response);
+				
+				$currentId = $response['id'];
+				
+				
+				for( ; ; )
+				
+				$response2 = $baza->query('SELECT `id`, `publicationId`, `reaction` FROM `actions_user_40` WHERE `publicationId` = '.$currentId.'');
+				
+				if(empty($baza))
+				return $currentId;
+				else
+				$currentId --;
+				
+				
+				
+			
+			
+		echo('{"status":"sukces"}');
+		}
+		
+		}
+		
+		
+		
+	
 }else{
 	echo('{"status":"błąd nie podana akcja"}');
 }

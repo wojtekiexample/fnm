@@ -27,7 +27,7 @@ start
 0. create database model
 		a. users - DONE
 		b. objects - DONE
-	c. reactions
+		c. reactions - DONE
 
 	//later 2. insert sample data
 
