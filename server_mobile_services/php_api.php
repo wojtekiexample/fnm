@@ -184,17 +184,21 @@ if (isset($requestData['action'])){
 				$currentId = $response['id'];
 				
 				
-				for( ; ; )
+				for( ; ; ){
 				
 				$response2 = $baza->query('SELECT `id`, `publicationId`, `reaction` FROM `actions_user_40` WHERE `publicationId` = '.$currentId.'');
+				$response2 = mysqli_fetch_assoc($response2);	
+				$isEmpty = $response2['id'];
 				
-				if(empty($baza))
+							
+				if(empty($isEmpty))
 				return $currentId;
+				break;
 				else
 				$currentId --;
 				
 				
-				
+			}
 			
 			
 		echo('{"status":"sukces"}');
