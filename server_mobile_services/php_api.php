@@ -169,17 +169,14 @@ if (isset($requestData['action'])){
 	 * 		b. tak -> zwiększ $n o 1, przejdź do 1.
 	 * 
 	 * */
-			echo 'dppa';
 			
 				$userId = $requestData['userId'];
 				
-				$response = $baza->query('SELECT id FROM funnyContent ORDER BY id DESC LIMIT 1;');
-				//$response = .mysqli_fetch_assoc($response);
-				$wieraszAsoc = $kontaktZBaza->selectRowsToArrayOfAsoc($response);
-				
-				$currentId = $kontaktZBaza['id'];
-				
-					echo $currentId;
+				$query = 'SELECT `id` FROM `funnyContent` ORDER BY `id` DESC LIMIT 1;';
+				$wieraszAsoc = $kontaktZBaza->selectRowToAsoc($query);
+				$currentId = $wieraszAsoc['id'];
+				echo("nasze current id to: ".$currentId);
+
 					
 				for( ; $currentId==0 ; ){
 				
