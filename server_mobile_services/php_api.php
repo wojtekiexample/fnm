@@ -7,8 +7,7 @@ require ('functions/KontaktZBaza.php');
 $baza = mysqli_connect('mariadb5.iq.pl', 'iexample_fnm', 'rcdky4y3zu', 'iexample_fnm');
 // gdzies haslo wywalic importem z wyzszego katalogu moze
 
-if (!$baza) {die("Connection to MySQL database failed " . mysqli_connect_error());
-}
+if (!$baza) {die("Connection to MySQL database failed " . mysqli_connect_error());}
 
 
 $kontaktZBaza  = new KontaktZBaza($baza);
@@ -67,7 +66,6 @@ if (isset($requestData['action'])){
 			echo('{"status":"sukces"}');
 		}
 	}
-	
 	
 	if ($requestData['action'] == 'addFunnyContent'){
 
@@ -138,9 +136,6 @@ if (isset($requestData['action'])){
 		
 		}
 	
-	
-	
-	
 	if($requestData['action'] == 'getContent'){
 		
 		/*
@@ -174,7 +169,7 @@ if (isset($requestData['action'])){
 	 * 		b. tak -> zwiększ $n o 1, przejdź do 1.
 	 * 
 	 * */
-
+			echo 'dppa';
 			
 				$userId = $requestData['userId'];
 				
@@ -184,7 +179,7 @@ if (isset($requestData['action'])){
 				$currentId = $response['id'];
 				
 				
-				for( ; ; ){
+				for( ; $currentId==0 ; ){
 				
 				$response2 = $baza->query('SELECT `id`, `publicationId`, `reaction` FROM `actions_user_'.$userId.'` WHERE `publicationId` = '.$currentId.'');
 				$response2 = mysqli_fetch_assoc($response2);	
@@ -192,7 +187,7 @@ if (isset($requestData['action'])){
 							
 				if(empty($isEmpty))
 					{
-					return $currentId;
+					echo '{"fcContent:"'.$currentId.'","fcTitle:"dupa"}';
 					break;
 					}
 				else
