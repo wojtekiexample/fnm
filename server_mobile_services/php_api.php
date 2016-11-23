@@ -179,7 +179,7 @@ if (isset($requestData['action'])){
 				$currentId = $response['id'];
 				
 				
-				for( ; ; ){
+				for( ; $currentId==0 ; ){
 				
 				$response2 = $baza->query('SELECT `id`, `publicationId`, `reaction` FROM `actions_user_'.$userId.'` WHERE `publicationId` = '.$currentId.'');
 				$response2 = mysqli_fetch_assoc($response2);	
