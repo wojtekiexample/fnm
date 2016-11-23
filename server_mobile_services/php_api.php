@@ -127,7 +127,7 @@ if (isset($requestData['action'])){
 			$fcObjectId = $requestData['fcObjectId'];
 			$fcReaction = $requestData['fcReaction'];
 
-			$baza->query('INSERT INTO `action_user_'.$userId.'` set `id`='.$fcObjectId', `reaction`='.$fcReaction.',`publicationId`='.$fcObjectId';');
+			$baza->query('INSERT INTO `action_user_'.$userId.'` set `id`='.$fcObjectId.', `reaction`='.$fcReaction.',`publicationId`='.$fcObjectId.';');
 			
 			// id 	publicationId 	reaction 
 			
