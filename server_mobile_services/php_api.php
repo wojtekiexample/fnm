@@ -169,34 +169,24 @@ if (isset($requestData['action'])){
 	 * 		b. tak -> zwiększ $n o 1, przejdź do 1.
 	 * 
 	 * */
-			echo 'dppa';
 			
 				$userId = $requestData['userId'];
 				
-				$response = $baza->query('SELECT id FROM funnyContent ORDER BY id DESC LIMIT 1;');
-				//$response = .mysqli_fetch_assoc($response);
-				$wieraszAsoc = $kontaktZBaza->selectRowsToArrayOfAsoc($response);
-				
-				$currentId = $kontaktZBaza['id'];
-				
-					echo $currentId;
+				$query = 'SELECT `id` FROM `funnyContent` ORDER BY `id` DESC LIMIT 1;';
+				$wieraszAsoc = $kontaktZBaza->selectRowToAsoc($query);
+				$currentId = $wieraszAsoc['id'];
 					
-				for( ; $currentId==0 ; ){
+				for($x=$currentId ;  ; $x-- ){
+			
+				$query = 'SELECT `id` FROM `actions_user_'.$userId.'` WHERE `publicationId` = '.$x.';';
+				$wieraszAsoc = $kontaktZBaza->selectRowToAsoc($query);
+				$match = $wieraszAsoc['id'];
 				
-				$response2 = $baza->query('SELECT `id`, `publicationId`, `reaction` FROM `actions_user_'.$userId.'` WHERE `publicationId` = '.$currentId.'');
-		//		$response2 = mysqli_fetch_assoc($response2);	
-				selectRowsToArrayOfAsoc($response2);
-				$isEmpty = $response2['id'];
+				if(empty($match)){
+					echo '{"fcContent":"'.$x.'","fcTitle":"dupa","fcURL":"/sciezkadokatalogu/smieszki'.$x.'.html"}';
+					break;	
+				}
 				
-						
-							
-				if(empty($isEmpty))
-					{
-					echo '{"fcContent:"'.$currentId.'","fcTitle:"dupa"}';
-					break;
-					}
-				else
-				$currentId --;
 			}
 			
 			
