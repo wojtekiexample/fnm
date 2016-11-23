@@ -169,7 +169,7 @@ if (isset($requestData['action'])){
 	 * 		b. tak -> zwiększ $n o 1, przejdź do 1.
 	 * 
 	 * */
-
+			echo 'dppa';
 			
 				$userId = $requestData['userId'];
 				
