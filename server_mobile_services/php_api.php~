@@ -2,52 +2,22 @@
 require ('functions/SajanaJsonAjax.php');
 require ('functions/KontaktZBaza.php');
 
-
-
-
-
 //Łączenie z bazką
 $baza = mysqli_connect('mariadb5.iq.pl', 'iexample_fnm', 'rcdky4y3zu', 'iexample_fnm');
 if (!$baza) {die("Connection to MySQL database failed " . mysqli_connect_error());
-}else{echo('polaczone z bazka<br/>');}
-
-
-// tu zmieniam sobie insex testy żeby wiedzieć czy serwer nie cashuje poprzedniej wersji
-echo("test31: <br/>");
+}
 
 
 $kontaktZBaza  = new KontaktZBaza($baza);
 $jsonAjaxApi = new SajanaJsonAjaxApi();
-
-
-
-
-
-
-
-
-
-
-/*
-
-PHP API na razie do pierwszych testów na GET potem przepnie się na post i najlepiej na model json->php->json
-
-główny parametr jaki przyjmuje API to action i objectID, który odpowiada odpowiedniej funkcji API
-
-*/
-
-<<<<<<< HEAD:server_mobile_services/php_api.php
-
+	
 $requestData = $jsonAjaxApi->odbierzSajanAjax('apiRequest');
+
+
 if (isset($requestData['action'])){
 	if ($requestData['action'] == 'addUser'){
-/*#################################
-=======
-if (isset($_GET['action'])){
-	if ($_GET['action'] == 'addUser'){
 
-		/*#################################
->>>>>>> 6b5cfdb96a22f27f310c87579e30c237615b0dbd:server_mobile_services/php_api.php~
+        /*#################################
 		
 		addUser 
 		
@@ -62,51 +32,64 @@ if (isset($_GET['action'])){
 			password: string
 			eMail:eMail
 		
-		RETURN:string
+		RETURN:jsonString - statuss
 		 	komunikat czy sie zapisało na razie strigowy
 		
 		
 		#############################*/
 
-		echo("akcja dodaj usera <br/>");
-<<<<<<< HEAD:server_mobile_services/php_api.php
 		if (isset($requestData['login']) && isset($requestData['password'])&& isset($requestData['eMail'])){
-			echo("wszystko jest set<br/>");
-			$login = mysql_real_escape_string($requestData['login']);
+
+			$login = $requestData['login'];
 			$password = $requestData['password'];
-			$passordHash = md5($password);
-			$eMail = mysql_real_escape_string($requestData['eMail']);
+			$passordHash = md5($password,false);
+			$eMail = $requestData['eMail'];
 
+
+			$baza->query("INSERT INTO `users` set `login`='$login', `passwordHash`='$passordHash',`eMail`='$eMail';");
 			
-=======
-
-		if (isset($_GET['login']) && isset($_GET['password'])&& isset($_GET['eMail'])){
-
-			echo("wszystko jest set<br/>");
-			
-			$login = $_GET['login'];
-			$password = $_GET['password'];
-			$passordHash = md5($password);
-			$eMail = $_GET['eMail'];
->>>>>>> 6b5cfdb96a22f27f310c87579e30c237615b0dbd:server_mobile_services/php_api.php~
-			$sqlQueryString = "INSERT INTO `users` set `login`='$login', `passwordHash` = '$passwordHash',`eMail`='$eMail';";
-
-			if ($baza->query("$sqlQueryString")){
-				echo('gites powinno być w bazie');
-			}else{
-				echo('coś sie obsrało z wysłaniem do bazy');
-			}
-
 			//pobieranie aktualnego indexu tabeli users
 			$idUsera = $baza->insert_id;
+			
+			//ustalamy nazwe dla tabeli akcji danego usera znajac juz jego id
+			$userActionsTableName='actions_user_'.$idUsera;
+			
+			// dopisujemu mu nazwe jego wlasnej tabeli z akcjami
+			$baza->query("UPDATE `users` set `userActionsTableName`='$userActionsTableName' WHERE `id` = '$idUsera';");
 
 			//tworzymyTabeleUsera
-			$baza->query("CREATE TABLE actions_user_".$idUsera."(id int, publicationId int, reaction int)");
-			
+			$baza->query("CREATE TABLE $userActionsTableName (id int, publicationId int, reaction int)");
+
+			echo('{"status":"sukces"}');
 		}
 	}
+	if ($requestData['action'] == 'addFunnyContent'){
+        /*#################################
+		
+		addFunnyContent
+		
+		DESCRIPTION:
+			dodajae treść
+			
+		PARAMETERS:
+			ownerId:int - id usera który wrzucił
+			fcTitle:string - tytuł
+			fcContent:HTMLstrin - content
+			
+		RETURN:jsonString - status
+		#############################*/
+		if (isset($requestData['ownerId']) && isset($requestData['fcTitle'])&& isset($requestData['fcContent'])){
+			$ownerId = $requestData['ownerId'];
+			$fcTitle = $requestData['fcTitle'];
+			$fcContent = $requestData['fcContent'];
+			$baza->query("INSERT INTO `funnyContent` set `ownerId`='$ownerId', `fcTitle`='$fcTitle',`fcContent`='$fcContent';");
+			echo('{"status":"sukces"}');
+		}
+	}
+}else{
+	echo('{"status":"błąd nie podana akcja"}');
 }
 
 
-?> 
 
+?> 

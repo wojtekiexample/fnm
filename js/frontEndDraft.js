@@ -5,15 +5,26 @@ var dodajUseraLoginInput = document.getElementById("dodajUseraLoginInput");
 var dodajUseraPasswordInput = document.getElementById("dodajUseraPasswordInput");
 var dodajUseraEMailInput = document.getElementById("dodajUseraEMailInput");
 var dodajUseraBtn = document.getElementById("dodajUseraBtn");
+
+
+
 //doaaj coś smiesznego vars
 var dadajCosSmiesznegoIdInput = document.getElementById("dadajCosSmiesznegoIdInput");
 var dadajCosSmiesznegoTitleInput = document.getElementById("dadajCosSmiesznegoTitleInput");
 var dadajCosSmiesznegoContentInput = document.getElementById("dadajCosSmiesznegoContentInput");
 var dadajCosSmiesznegoBtn = document.getElementById("dadajCosSmiesznegoBtn");
+
+
+
 //listnery
 dodajUseraBtn.addEventListener("click",onClickDodajUseraBtn);
 dadajCosSmiesznegoBtn.addEventListener("click",onClickdadajCosSmiesznegoBtn);
+
+
+
+
 //funkcje na klik
+
 function onClickDodajUseraBtn(){
 	var apiRequest = new Object();
 	apiRequest.action = "addUser";

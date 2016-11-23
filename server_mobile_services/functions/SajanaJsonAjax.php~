@@ -1,21 +1,13 @@
 <?php
-
-
 class SajanaJsonAjaxApi{
-
 	//przyjmuje nazwe danej post zwraca zdekodowane jsona
-
 	function odbierzSajanAjax($nazwa){
 		if (isset($_POST[$nazwa])){
 			return  json_decode($_POST[$nazwa],true);
 		}
 		
 	}	
-
-
-
 	//echuje dane sformatowane w json
-
 	function wyslijSajanAjaxJakoArray($dane){
 		$daneDoWyslania = array ();
 		$numargs = func_num_args();
@@ -26,7 +18,4 @@ class SajanaJsonAjaxApi{
 		echo json_encode($daneDoWyslania);
 	}
 }
-
-
-
 ?>
