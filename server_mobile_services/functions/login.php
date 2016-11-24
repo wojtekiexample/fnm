@@ -23,7 +23,7 @@ if (isset($_SESSION['fnmUserId'])){
 	'<div id="loginPanel" align="center">
 	Jesteś zalogowany jako id: '.$_SESSION['fnmUserId'].' login: '.$_SESSION['fnmUserLogin'].' email: '.$_SESSION['fnmUserEmail'].' Przeloguj na: 
 	<input type="number" id="zalogujId" />
-	<button id="zalogujBtn">Zaloguj</button>
+	<button type="button" id="zalogujBtn">Zaloguj</button>
 	</div>
 	<script type="text/javascript">
 		var zalogujBtn = document.getElementById("zalogujBtn");
@@ -51,7 +51,7 @@ if (isset($_SESSION['fnmUserId'])){
 	'<div id="loginPanel"  align="center">
 	Nie jesteś zalogowany zaloguj na: 
 	<input type="number" id="zalogujId" />
-	<button id="zalogujBtn">Zaloguj</button>
+	<button type="button" id="zalogujBtn">Zaloguj</button>
 	</div>
 	<script type="text/javascript">
 		var zalogujBtn = document.getElementById("zalogujBtn");

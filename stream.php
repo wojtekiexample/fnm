@@ -17,15 +17,10 @@ session_start();
 <? require ('server_mobile_services/functions/login.php'); ?>
 
 
-
-
-UserID:	<input id="userIdInput" type="number"/>
-<button id="wciagajTrescBtn">wciągaj tresc dla usera</button>
-
 <div align="center">
 	<h1 id="fcTitleH1"></h1>
 	<div id="fcContentDiv"></div>
-    <button id="banBtn">Ban</button><button id="dontCareBtn">I don't care</button><button id="likeBtn">Like</button>
+    <button type="button" id="banBtn">Ban</button><button type="button" id="dontCareBtn">I don't care</button><button type="button" id="likeBtn">Like</button>
 </div>
 
 
@@ -35,7 +30,7 @@ UserID:	<input id="userIdInput" type="number"/>
 <script type="text/javascript">
 var fcTitleH1 = document.getElementById("fcTitleH1");
 var fcContentDiv = document.getElementById("fcContentDiv");
-var userIdInput = document.getElementById("userIdInput");
+
 
 var currentContentId;
 
@@ -43,27 +38,26 @@ var currentContentId;
 var banBtn = document.getElementById("banBtn");
 var dontCareBtn = document.getElementById("dontCareBtn");
 var likeBtn = document.getElementById("likeBtn");
-var wciagajTrescBtn = document.getElementById("wciagajTrescBtn");
+var userId =<?php if (isset($_SESSION['fnmUserId'])){echo($_SESSION['fnmUserId']);} ?>;
+
 
 
 
 
 //listenery
-wciagajTrescBtn.addEventListener("click",wciagajTrescBtnOnClick);
-
 banBtn.addEventListener("click",banBtnOnClick);
 dontCareBtn.addEventListener("click",dontCareBtnOnClick);
 likeBtn.addEventListener("click",likeBtnOnClick);
 
 //funkcje na klik
 function banBtnOnClick(){
-	sendReaction(userIdInput.value,currentContentId,1);
+	sendReaction(userId,currentContentId,1);
 }
 function dontCareBtnOnClick(){
-	sendReaction(userIdInput.value,currentContentId,2);
+	sendReaction(userId,currentContentId,2);
 }
 function likeBtnOnClick(){
-	sendReaction(userIdInput.value,currentContentId,3);
+	sendReaction(userId,currentContentId,3);
 }
 
 function sendReaction(userId,fcObjectId,fcReaction){
@@ -86,15 +80,15 @@ function gdyWyslanaReakcja(response){
 }
 
 
-function wciagajTrescBtnOnClick(){
-	var apiRequest = new Object();
-	apiRequest.action = "getContent";
-	apiRequest.userId = userIdInput.value;
-	
-	var jsonAjax = new SajanaAjax('/server_mobile_services/php_api.php',przetworzResponseCntentu);
-	jsonAjax.dodaj("apiRequest",apiRequest);
-	jsonAjax.start();
-}
+
+var apiRequest = new Object();
+apiRequest.action = "getContent";
+apiRequest.userId = userId;
+
+var jsonAjax = new SajanaAjax('/server_mobile_services/php_api.php',przetworzResponseCntentu);
+jsonAjax.dodaj("apiRequest",apiRequest);
+jsonAjax.start();
+
 
 
 
