@@ -2,17 +2,14 @@
 
 require ('functions/SajanaJsonAjax.php');
 require ('functions/KontaktZBaza.php');
+require ('functions/connectToDB.php');
 
-//Łączenie z bazką
-$baza = mysqli_connect('mariadb5.iq.pl', 'iexample_fnm', 'rcdky4y3zu', 'iexample_fnm');
-// gdzies haslo wywalic importem z wyzszego katalogu moze
 
-if (!$baza) {die("Connection to MySQL database failed " . mysqli_connect_error());}
 
 
 $kontaktZBaza  = new KontaktZBaza($baza);
 $jsonAjaxApi = new SajanaJsonAjaxApi();
-	
+
 $requestData = $jsonAjaxApi->odbierzSajanAjax('apiRequest');
 
 // case, switch, nie w petli if

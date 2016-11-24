@@ -1,15 +1,8 @@
 <?php
-echo("przed require");
+
 require ('functions/SajanaJsonAjax.php');
 require ('functions/KontaktZBaza.php');
-echo("przed połączeniem");
-//Łączenie z bazką
-$baza = mysqli_connect('mariadb5.iq.pl', 'iexample_fnm', 'rcdky4y3zu', 'iexample_fnm');
-// gdzies haslo wywalic importem z wyzszego katalogu moze
-
-if (!$baza) {die("Connection to MySQL database failed " . mysqli_connect_error());}
-
-
+require ('functions/connectToDB.php');
 
 
 //DROP DATABASE {mysql-database-name}
