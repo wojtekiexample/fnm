@@ -1,0 +1,212 @@
+<?php 
+
+
+require ('../../server_mobile_services/functions/SajanaJsonAjax.php');
+require ('../../server_mobile_services/functions/KontaktZBaza.php');
+require ('../../server_mobile_services/functions/connectToDB.php');
+
+
+$kontaktZBaza  = new KontaktZBaza($baza);
+$jsonAjaxApi = new SajanaJsonAjaxApi();
+$requestData = $jsonAjaxApi->odbierzSajanAjax('apiRequest');
+
+
+/*
+ * 	A. data:
+ * 1. get user table and save as array - query + fetch
+ * 2. get user_reactions tables and save as array
+ * 3. get chains data, save array
+ * 
+ * 	B. calculation:
+ * 1. set actual/ new trendsetters based on overall activity, included reaction wages - check influence_index in user entry
+ * 2. generate trendsetters new content arrays - remove banned content
+ * 
+ * 	C. update:
+ * 1. add new content (array) to chains 
+ * 2. create additional feed array if needed
+ *  
+*/
+	
+	/*
+
+	
+	// A data
+	
+	
+	// USERS:
+				$query = 'SELECT `id` FROM `funnyContent` ORDER BY `id` DESC LIMIT 1;';
+				$wieraszAsoc = $kontaktZBaza->selectRowToAsoc($query);
+				$currentId = $wieraszAsoc['id'];
+
+	for( ; count-query1 ; x++)
+		{
+				$query = 'SELECT `id` FROM `funnyContent` ORDER BY `id` DESC LIMIT 1;';
+				$wieraszAsoc = $kontaktZBaza->selectRowToAsoc($query);
+				$currentIdodX.x = $wieraszAsoc['id'];
+		}
+		
+	
+	// CONTENT:
+	
+	for(x do 10){
+		
+				$query = 'SELECT `id` FROM `funnyContent` ORDER BY `id` DESC LIMIT 1;';
+				$wieraszAsoc = $kontaktZBaza->selectRowToAsoc($query);
+				$trendchainOD$x = $wieraszAsoc['id'];
+				
+	}
+	
+				$query = 'SELECT `id` FROM `funnyContent` ORDER BY `id` DESC LIMIT 1;';
+				$wieraszAsoc = $kontaktZBaza->selectRowToAsoc($query);
+				$main_content = $wieraszAsoc['id'];
+		 */			
+				
+				
+	
+				
+
+	// B, C : calculation, upadte
+	
+	//wyznacz 10% (docelowo 1%) userow z najwyzszym influence index, zapisz po ID
+	
+	
+	//sprawdz ile userow
+
+		// SELECT `id` FROM `users` ORDER BY `id` DESC LIMIT 1;
+			//zwraca ID najwiekszego - sume;
+					
+				$query = 'SELECT * FROM `users` ORDER BY `id` DESC LIMIT 1;';
+				$wieraszAsoc = $kontaktZBaza->selectRowToAsoc($query);
+				$usercount = $wieraszAsoc['id'];
+			
+			echo 'users:: '.$usercount;
+
+	//oblicz ilość trendsetterów sortując po influence_index
+	
+			$trendsetterscount = floor($usercount*0.1);
+			
+			echo '<br><br>trendsetters count:: '.$trendsetterscount;
+									
+				$query = 'SELECT * FROM `users` ORDER BY `influenceIndex` DESC LIMIT '.$trendsetterscount.'; ';
+				$wieraszAsoc = $kontaktZBaza->selectRowToAsoc($query);
+				$trendsetters = $wieraszAsoc['id'];
+					//TODO: tablica, nie jedno id
+					
+			echo '<br><br>trendsetters ID:: '.$trendsetters;
+	
+	// SELECT * FROM `users` ORDER BY 'actionsCount' LIMIT 10 
+			// dla limit równego sumie userów
+	
+	
+	
+	// !!!
+	//TODO: zwiększanie influence_index przy akcjach użytkowników
+	// !!!
+	
+	
+	$trendsetter1 = $trendsetters;
+	
+	
+		// pobierz tablice reakcji trendsettera
+				$query = 'SELECT * FROM `actions_user_'.$trendsetter1.'` ; ';
+				$reactionstrendsetter1 = $kontaktZBaza-> selectRowsToArrayOfAsoc($query);
+	//			$reactions_trendsetter1[] = $wieraszAsoc[];
+
+	//echo $reactions_trendsetter1[];
+	echo "<br><br>reactions:: ";
+	print_r ($reactionstrendsetter1);
+	
+
+		// pobierz tablice stream 1
+	
+				$query = 'SELECT * FROM `stream1` ; ';
+				$stream1 = $kontaktZBaza-> selectRowsToArrayOfAsoc($query);
+	echo "<br><br>stream 1:: ";
+	print_r ($stream1);
+
+	
+		// pobierz tablice stream 2
+	
+				$query = 'SELECT * FROM `stream2` ; ';
+				$stream2 = $kontaktZBaza-> selectRowsToArrayOfAsoc($query);
+	echo "<br><br>stream 2:: ";
+	print_r ($stream2);
+
+
+
+
+	//stwrorz licznik punktow dla trendsetterow, sprawdzaj dla feedow, wyznacz najwyzszy
+	
+	/* 
+	 *
+	 * znajdz sume reakcji usera, znajdz sume feeda
+	 * 
+	 * wez ostatnia -n reakcje usera, poszukaj w feedzie
+	 * 	jesli jest -> dodaj/odejmij punkty w zaleznosci od reakcji
+	 * 	jesli nie -> dekrementuj n, powtorz
+	 * wydrukuj licznik dla feeda
+	 * 
+	 * */ 
+
+
+		// wyznacz sume reakcji trendera
+
+				$query = 'SELECT `id` FROM `actions_user_'.$trendsetter1.'` ORDER BY `id` DESC LIMIT 1; ';
+				$trendsetter1reactioncount =  $kontaktZBaza-> selectRowToAsoc($query);
+
+	echo "<br><br>trendssett1 react count:: ".$trendsetter1reactioncount['id'];
+
+
+		// wyznacz sume stream 1
+
+				$query = 'SELECT `id` FROM `stream1` ORDER BY `id` DESC LIMIT 1; ';
+				$stream1count =  $kontaktZBaza-> selectRowToAsoc($query);
+
+	echo "<br><br>stream1 count:: ".$stream1count['id'];
+
+
+
+	// dla każdej reakcji usera, sprawdź pozycje streamu
+	// złożoność obliczeniowa?
+for($l=0 ; $l<$trendsetter1reactioncount['id'] ; $l++){
+	
+	echo "<br>petla for (reakcje trendera) nr:: ".$l;
+	
+	
+	for($l2=0 ; $l2<$stream1count['id'] ; $l2++ ){
+		
+		echo "<br>petla for2 (czy content z reakcji jest w feedzie) nr :: ".$l2 ;
+		
+		}
+	
+	
+	}
+
+//$result = mysql_query("SELECT * FROM `actions_user_".$trendsetter1."` ; ") or die(mysql_error());
+
+ ///selectRowsToArrayOfAsoc
+   
+// Put them in array
+//for($i = 0; $array[$i] = mysql_fetch_assoc($result); $i++) 
+//echo "<br><br>react:: "$array[$i];
+
+
+
+	
+	//porównaj tabele rekacji trendsetterów z newsfeedami, przypisz
+	//update trend_chains wg banów trendsetterów ORAZ ilości_punktów_treści
+					//	;;;;	//utwórz trendsetterom przypisanie jako trenderzy danego feeda
+					
+	//założenie: jest 10 content_sreams 
+	
+	
+
+	//porównaj tabele kazdego usera z tabelami reakcji trendsetterów
+	
+	//przypisz każdemu użytkownikowi trendchain i trendsettera, na podstawie przypisania trendsettera do newsfeeda
+	
+	
+	
+
+
+?>
