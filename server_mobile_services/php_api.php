@@ -4,6 +4,11 @@ require ('functions/SajanaJsonAjax.php');
 require ('functions/KontaktZBaza.php');
 require ('functions/connectToDB.php');
 
+//WAGI REAKCJI
+
+
+
+
 
 
 
@@ -124,6 +129,31 @@ if (isset($requestData['action'])){
 			$userId = $requestData['userId'];
 			$fcObjectId = $requestData['fcObjectId'];
 			$fcReaction = $requestData['fcReaction'];
+			
+			//przypisanie influanceIndex
+			$wagaReakcji=0;
+			switch($fcReaction){
+				case 1:
+				//ban
+				$wagaReakcji = 10;
+				break;
+				case 2:
+				//dontCare
+				$wagaReakcji = 5;
+				case 3:
+				//dontCare
+				$wagaReakcji = 1;
+			}
+			
+			
+			
+			$result = $kontaktZBaza->selectRowToAsoc("SELECT `influenceIndex` FROM `users` WHERE `id`='".$userId."';");
+			$aktualnyInfluenceIndex = $result['influenceIndex'];
+			$nowyInfluenceIndex = $aktualnyInfluenceIndex + $wagaReakcji;
+			
+			$query ='Update `users` set `influenceIndex`= '.$nowyInfluenceIndex.' WHERE `id`='.$userId.';';
+			$baza->query($query);
+			
 			
 			if ($baza->query('INSERT INTO `actions_user_'.$userId.'` set `reaction`='.$fcReaction.',`publicationId`='.$fcObjectId.';')){
 				echo('{"status":"sukces"}');
