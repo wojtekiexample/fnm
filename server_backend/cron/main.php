@@ -9,6 +9,8 @@ $jsonAjaxApi = new SajanaJsonAjaxApi();
 $requestData = $jsonAjaxApi->odbierzSajanAjax('apiRequest');
 
 /*
+ * General idea:
+ * 
  * 	A. data:
  * 1. get user table and save as array - query + fetch
  * 2. get user_reactions tables and save as array
@@ -23,11 +25,24 @@ $requestData = $jsonAjaxApi->odbierzSajanAjax('apiRequest');
  * 1. add new content (array) to chains 
  * 2. check user to trendsetter similarity - find and save best match
  *  
+ * 
+ * 
+ * Procedura obliczania:
+ * 1. na podstawie sumy użytkowników określ ilość trendsetterów
+ * 2. wyznacz trendsetterów na podstawie influence_index
+ * 3. pobierz dane: tablice reakcji trenderów, tablice streamów, określ ich sumy (długość)
+ * 4. sprawdź najwyższą zbieżność między tablicami feedu i trenderów, przyjmując wagi: dislike -5, dontcare -1, like +5
+ * 5. przypisz trenderów do feedów
+ * 6. na podstawie reakcji trenderów znajdź unikalne (niewystępujące w feedzie) treści, dodaj je do streamów (grup)
+ * 7. pobierz tablice reakcji użytkowników i znajdź najwyższą zbieżność z tablicami trenderów, przyjmując wagi (dla jednakowych reakcji): 
+ * 
+ *  
 */
 		
 	//wyznacz 10% (docelowo 1%) userow z najwyzszym influence index, zapisz po ID
 	
-	//sprawdz ile userow
+	
+			//sprawdz ile userow
 					
 			$query = 'SELECT * FROM `users` ORDER BY `id` DESC LIMIT 1;';
 			$wieraszAsoc = $kontaktZBaza->selectRowToAsoc($query);
@@ -52,6 +67,7 @@ $requestData = $jsonAjaxApi->odbierzSajanAjax('apiRequest');
 	
 	// !!!
 	//TODO: zwiększanie influence_index przy akcjach użytkowników
+	//TODO: reset infuence_index
 	// !!!
 	
 	
@@ -67,7 +83,8 @@ $requestData = $jsonAjaxApi->odbierzSajanAjax('apiRequest');
 		
 }
 
-		// pobierz tablice streamów
+
+	// pobierz tablice streamów
 
 		for($t=1; $t<11 ; $t++){
 			
@@ -80,7 +97,7 @@ $requestData = $jsonAjaxApi->odbierzSajanAjax('apiRequest');
 				}
 	
 	
-		//pobierz tablice funnyContent
+	//pobierz tablice funnyContent
 		
 				$query = 'SELECT * FROM `funnyContent` ; ';
 				$mainstream = $kontaktZBaza-> selectRowsToArrayOfAsoc($query);
@@ -88,22 +105,19 @@ $requestData = $jsonAjaxApi->odbierzSajanAjax('apiRequest');
 					print_r ($mainstream);
 				
 				
-				
-				
-				//stwrorz licznik punktow dla trendsetterow, sprawdzaj dla feedow, wyznacz najwyzszy
+
+	echo "<br><br>";				
 	/* 
 	 *
 	 * znajdz sume reakcji usera, znajdz sume feeda
 	 * 
 	 * wez ostatnia -n reakcje usera, poszukaj w feedzie
-	 * 	jesli jest -> dodaj/odejmij punkty w zaleznosci od reakcji
+	 * 	jesli jest -> dodaj/odejmij punkty do pomocniczej zmiennej, w zaleznosci od reakcji
 	 * 	jesli nie -> dekrementuj n, powtorz
-	 * wydrukuj licznik dla feeda
 	 * 
 	 * */ 
 
 
-	echo "<br><br>";
 
 		// wyznacz sume reakcji trenderów
 			
@@ -118,6 +132,7 @@ $requestData = $jsonAjaxApi->odbierzSajanAjax('apiRequest');
 	
 	echo "<br><br>";
 	
+	
 		// wyznacz sume streamów
 		
 	for($t2=1; $t2<11 ; $t2++){
@@ -131,12 +146,23 @@ $requestData = $jsonAjaxApi->odbierzSajanAjax('apiRequest');
 
 
 
-	//echo "<br><br>";
+	// złożoność obliczeniowa? -> docelowo do dodania limity na wywołaniach SQL, ogólnie skrypt może się liczyć spokojnie 3-12 godzin
 	
-
-	// złożoność obliczeniowa?
 	// przyporządkuj trenderów do feedów
-	
+	/*
+	 * znajdź treści na które zareagował user, zmień zmienną pomocniczą (licznik podobieństwa) w zależności od reakcji
+	 * 
+	 * pętla (taka sama zastosowana w obliczaniu zbieżności użytkownik-trender):
+	 * 1. dla każdego trendera
+	 * 2. dla każdej reakcji trendera
+	 * 3. dla każdego feeda
+	 * 4. dla każdego obrazka feeda
+	 * 		sprawdź, czy się pokrywają:
+	 * 		tak -> zmień wskaźnik podobieństwa
+	 * 5. znajdź najwyższy wskaźnik podobieństwa, zapisz jako powiązanie w bazie (trender->feed)
+	 */
+	 
+	 
 for($l=0 ; $l<$trendsetterscount ; $l++){
 	//echo "<br><strong>for1 userow</strong>";
 	//petla trenderow
@@ -185,9 +211,12 @@ for($l=0 ; $l<$trendsetterscount ; $l++){
 			}
 		}
 	}
+
+
+
+
 	
 	echo "<br><br>";
-	
 	
 	//wydrukuj podobienstwa do feedow
 	
@@ -200,6 +229,9 @@ for($l=0 ; $l<$trendsetterscount ; $l++){
 	}
 		
 
+
+
+
 	echo "<br><br>";
 	
 	//wyznacz feed o najwyzszej zbieznosci
@@ -209,22 +241,25 @@ for($l=0 ; $l<$trendsetterscount ; $l++){
 	$highestfeed[$l] = max($usertofeed[$l]);
 	$matchedfeed[$l] = array_search($highestfeed[$l], $usertofeed[$l]);
 	
+	//$value = max($array);	
+	//$key = array_search($value, $array);
+
+
 	echo "<br> matched feed :: trender=".$l." feed=".$matchedfeed[$l];
 	
 	}	
-		
-//$value = max($array);	
-//$key = array_search($value, $array);
 
-	//echo "<br><br>";
+
+
+
+
+
 
 
 // wez tablice reakcji trendera, znajdz unikalne pozycje, w zależności od reakcji dodaj do streama
 	
-	
-	// for dla kazdego trendera
-		// for reakcji
-			// sprawdz, reakcje - wez liki
+	// petle for,
+	// sprawdz, reakcje - wez liki
 				// sprawdz czy jest ID w streamie
 					// jesli nie dodaj wpis do tablicy
 					
@@ -255,7 +290,7 @@ for($l=0 ; $l<$trendsetterscount ; $l++){
 			$uniquecontent[$l]++;
 
 			array_push($addtostream[$l], $reactionstrendsetter[$l][$o]['publicationId']);
-			// add to feed !!
+			//TODO: add to feed, not only array !!
 			
 			}
 		
@@ -277,25 +312,32 @@ print_r ( $addtostream[$l]);
 echo "<br>";
 }
 
-	//utwórz w bazie trendsetterom przypisanie jako trenderzy danego feeda
+
+
+
+	//TODO: utwórz w bazie trendsetterom przypisanie jako trenderzy danego feeda
 	
 
+
 		
-	//porównaj tabele kazdego usera z tabelami reakcji trendsetterów
+	//wyznacz najwyższą zbieżność tablic usera do trendera
 	//przypisz każdemu użytkownikowi trendchain i trendsettera, na podstawie przypisania trendsettera do newsfeeda
-	
-	// zapisz baze users jako array
-	
-	// for dla kazdego usera
-			// wez tablice reakcji
-				// porownaj, znajdz najwyzsza zbieznosc -> selekcja negatywna
-					// zapisz odniesienie do trendsettera
+
+	/*
+	 for dla kazdego usera
+			 wez tablice reakcji
+				 porownaj, znajdz najwyzsza zbieznosc -> selekcja negatywna
+					 zapisz odniesienie do trendsettera
 		
-//for(userscount
-//	for (userreactioncout
-//		for(trender
-//			for(trendserreactions
-//				$zbieznosc1,2
+		
+		
+for(userscount
+	for (userreactioncout
+		for(trender
+			for(trendserreactions
+				$zbieznosc1,2
+
+*/
 
 
 	// coby nie bylo nieskonczonej petli dla sumy reakcji = null
@@ -303,6 +345,8 @@ echo "<br>";
 for($a=1 ; $a <= $usercount ; $a++){
 	$userreactioncount[$a] = 0;
 	}		
+	
+	
 	
 
 for($a=1 ; $a <= $usercount ; $a++){
@@ -332,7 +376,7 @@ for($a=1 ; $a <= $usercount ; $a++){
 					//echo "<br>for4 reakcji trenderow";
 						//for reakcji trenderow
 					
-					// spr
+					// sprawdzenie
 					// jesli reakcja usera == reakcja trendera --> zwieksz licznik podobienstwa // switch 
 					
 					if($userreactions[$a][$b]['publicationId'] == $reactionstrendsetter[$c][$d]['publicationId']){
@@ -340,7 +384,7 @@ for($a=1 ; $a <= $usercount ; $a++){
 							//ten if pokrywa tylko IDiki reakcji, nie ich rodzaj!!!
 						
 						
-						// switch rodzajow reakcji
+						//TODO: switch rodzajow reakcji
 						
 						$usertotrender[$a][$c]++;
 					
@@ -373,6 +417,7 @@ for($a=1 ; $a <= $usercount ; $a++){
 }
 * 
 */
+
 
 //wyznacz i wydrukuj najwyzsze zbieznosci dla userow 
 
