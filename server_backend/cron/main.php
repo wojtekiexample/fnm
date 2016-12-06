@@ -106,7 +106,8 @@ $requestData = $jsonAjaxApi->odbierzSajanAjax('apiRequest');
 				
 				
 
-	echo "<br><br>";				
+	echo "<br><br>";			
+		
 	/* 
 	 *
 	 * znajdz sume reakcji usera, znajdz sume feeda
@@ -161,8 +162,6 @@ $requestData = $jsonAjaxApi->odbierzSajanAjax('apiRequest');
 	 * 		tak -> zmień wskaźnik podobieństwa
 	 * 5. znajdź najwyższy wskaźnik podobieństwa, zapisz jako powiązanie w bazie (trender->feed)
 	 * 
-	 * 
-	 * UWAGA na nadpisanie danych z porównania trender-trender
 	 *  
 	 */
 	 
@@ -294,8 +293,7 @@ for($l=0 ; $l<$trendsetterscount ; $l++){
 			$uniquecontent[$l]++;
 
 			array_push($addtostream[$l], $reactionstrendsetter[$l][$o]['publicationId']);
-			//TODO: add to feed, not only array !!
-			
+	
 			}
 		
 		}
@@ -316,11 +314,20 @@ print_r ( $addtostream[$l]);
 echo "<br>";
 }
 
-
-
-
-	//TODO: utwórz w bazie trendsetterom przypisanie jako trenderzy danego feeda
 	
+	// dodaj elementy do streamów
+	
+for($l=0 ; $l<$trendsetterscount ; $l++){
+	//for trenderów
+	
+	for($m=0 ; $m<count($addtostream[$l]) ; $m++){
+		//for obrazków do dodania
+		
+		//echo "RT INTO `".$matchedfeed[$l]."` set `contentID`=".$addtostream[$l][$m];
+		$baza->query("INSERT INTO `stream".$matchedfeed[$l]."` set `contentID`=".$addtostream[$l][$m].";");
+		
+		}
+}
 
 
 		
@@ -341,6 +348,10 @@ for(userscount
 			for(trendserreactions
 				$zbieznosc1,2
 
+	 * 
+	 * UWAGA na nadpisanie danych z porównania trender-trender
+	 * 
+
 */
 
 
@@ -351,8 +362,6 @@ for($a=1 ; $a <= $usercount ; $a++){
 	}		
 	
 	
-	
-
 for($a=1 ; $a <= $usercount ; $a++){
 	//for userow
 	//echo "<br> for1 userow";
@@ -423,7 +432,7 @@ for($a=1 ; $a <= $usercount ; $a++){
 */
 
 
-//wyznacz i wydrukuj najwyzsze zbieznosci dla userow 
+//wyznacz, wydrukuj i zapisz najwyzsze zbieznosci dla userow 
 
 for($a=1 ; $a <= $usercount ; $a++){
 	
@@ -431,19 +440,17 @@ for($a=1 ; $a <= $usercount ; $a++){
 	$usertrender[$a] = array_search($usertrender2[$a], $usertotrender[$a]);
 	
 	echo "<br> matched user ::".$a." trender=".$usertrender[$a];
+
+	$baza->query("UPDATE `users` SET `asignedTransetter`=".$trendsetter[$usertrender[$a]]['id']." WHERE `id`=".$a.";");
+	//echo "fsd ".$trendsetter[1]['id']."fs".$trendsetter[$amin]['id'];
+	
+	//echo "ttsts".$matchedfeed[array_search($trendsetter[$usertrender[$a]], $trendsetter)];
+	$idfeedu = $matchedfeed[array_search($trendsetter[$usertrender[$a]], $trendsetter)];
+	//echo "tsts".$idfeedu;
+	
+	$baza->query("UPDATE `users` SET `assignedFeed`=".$idfeedu." WHERE `id`=".$a.";");
 	
 	}	
-	
-	
-
-
-echo "<br><br>";
-
-
-// zapisz powiazanie user -> trender
-
-// zapisz powiazanie trender -> feed
-
 
 	
 echo "<br>end<br>";
