@@ -63,12 +63,6 @@ $requestData = $jsonAjaxApi->odbierzSajanAjax('apiRequest');
 					
 			echo '<br><br><strong>trendsetters array:: </strong>';
 			print_r ($trendsetter);
-		
-	
-	// !!!
-	//TODO: zwiększanie influence_index przy akcjach użytkowników
-	//TODO: reset infuence_index
-	// !!!
 	
 	
 	
@@ -452,7 +446,16 @@ for($a=1 ; $a <= $usercount ; $a++){
 	
 	}	
 
+
+
+// reset infuence_index userow w bazie
+
+$baza->query("UPDATE `users` set `influenceIndex`=0 WHERE 1;");
 	
+	
+	
+		
+		
 echo "<br>end<br>";
 
 
